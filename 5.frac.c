@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "list.h"
 
 static int find(struct list_head *heads, int size, int key);
@@ -47,10 +48,8 @@ char *fractionToDecimal(int numerator, int denominator)
     long long d = denominator;
 
     /* deal with negtive cases */
-    if (n < 0)
-        n = -n;
-    if (d < 0)
-        d = -d;
+    n= ((n >> 63) ^ n) - (n >> 63);
+    d = ((d >> 63) ^ d) - (d >> 63);
 
     bool sign = (float) numerator / denominator >= 0;
     if (!sign)
@@ -126,11 +125,11 @@ void free_list(struct list_head *heads, size_t size)
 
 int main(){
     
-    char* res1 = fractionToDecimal(3, 2);
-    char* res2 = fractionToDecimal(2, 3);
-
-    printf("farctionToDecimal(3, 2) = %s\n", res1);
-    printf("farctionToDecimal(2, 3) = %s\n", res2);
+    char* res1 = fractionToDecimal(-2, 3);
+    char* res2 = fractionToDecimal(3, -2);
+  
+    printf("farctionToDecimal(-2, 3) = %s\n", res1);
+    printf("farctionToDecimal(3, -2) = %s\n", res2);
 
     free(res1);
     free(res2);
